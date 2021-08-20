@@ -35,7 +35,7 @@
 # THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
+from m5.util import inform
 from m5.defines import buildEnv
 from m5.params import *
 from m5.proxy import *
@@ -706,7 +706,8 @@ class RealView(Platform):
             device.pio = bus.mem_side_ports
         if hasattr(device, "dma"):
             if dma_ports is None:
-                device.dma = bus.cpu_side_ports
+                #device.dma = bus.cpu_side_ports
+                pass
             else:
                 dma_ports.append(device.dma)
 
@@ -1254,7 +1255,7 @@ Interrupts:
         """
         if hasattr(self, 'smmu'):
             m5.fatal("A SMMU has already been instantiated\n")
-
+        inform("inside attach smmu")
         self.smmu = SMMUv3(reg_map=AddrRange(0x2b400000, size=0x00020000))
 
         self.smmu.request = bus.cpu_side_ports
@@ -1262,7 +1263,7 @@ Interrupts:
 
         dma_ports = []
         for dev in devices:
-            self._attach_device(dev, bus, dma_ports)
+            #self._attach_device(dev, bus, dma_ports)
             self.smmu.connect(dev)
 
     def setupBootLoader(self, cur_sys, boot_loader):
